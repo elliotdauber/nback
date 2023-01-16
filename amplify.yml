@@ -5,7 +5,7 @@ frontend:
       commands:
         - echo "Building app"
         - mkdir dist
-        - cp nback.html dist/
+        - cp index.html dist/
         - cp styles.css dist/
         - cp nback.js dist/
   artifacts:
@@ -13,8 +13,3 @@ frontend:
     files:
       - '**/*'
   framework: html
-
-hosting:
-  S3AndCloudFront:
-    indexDocument: nback.html
-    errorDocument: nback.html
