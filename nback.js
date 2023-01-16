@@ -29,6 +29,7 @@ class NbackGame {
     $("#game-display").show();
     $("#display").html("");
     $("#score").html(0);
+    $("#score-board").css("color", "black");
     for (var i = 0; i < this.numItems; i++) {
       this.sequence.push(this.generateItem());
     }
@@ -42,8 +43,13 @@ class NbackGame {
     this.displayItem(this.currentItem);
   }
 
-  updateScore(score) {
-    $("#score").html(score);
+  updateScore(correct) {
+    $("#score").html(this.correctAnswers);
+    if (correct) {
+      $("#score-board").css("color", "#459735");
+    } else {
+      $("#score-board").css("color", "#D15748");
+    }
   }
 
   endGame() {
@@ -130,10 +136,12 @@ $("#start-game").click(function() {
 $("#yes").click(() => {
   if (!game) return;
   var previousItemIndex = game.currentRound - game.nback;
+  var correct = false;
   if (previousItemIndex >= 0 && game.currentItem == game.sequence[game.currentRound - game.nback]) {
     game.correctAnswers++;
+    correct = true;
   }
-  game.updateScore(game.correctAnswers);
+  game.updateScore(correct);
   if (game.currentRound == game.numItems - 1) {
     game.endGame();
     game = null;
@@ -145,10 +153,12 @@ $("#yes").click(() => {
 $("#no").click(() => {
   if (!game) return;
   var previousItemIndex = game.currentRound - game.nback;
+  var correct = false;
   if (previousItemIndex < 0 || game.currentItem != game.sequence[game.currentRound - game.nback]) {
     game.correctAnswers++;
+    correct = true;
   }
-  game.updateScore(game.correctAnswers);
+  game.updateScore(correct);
   if (game.currentRound == game.numItems - 1) {
     game.endGame();
     game = null;
