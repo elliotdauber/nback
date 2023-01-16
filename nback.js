@@ -19,7 +19,7 @@ class NbackGame {
 
   displayItem(item) {
     var msg = new SpeechSynthesisUtterance();
-    msg.text = item;
+    msg.text = item.toLowerCase();
     window.speechSynthesis.speak(msg);
     $("#display").html("");
     $("#display").html(item);
