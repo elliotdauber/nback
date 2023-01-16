@@ -1,17 +1,19 @@
-version: 1
+version: 1.0
 frontend:
   phases:
     build:
-      commands: []
+      commands:
+        - echo "Building app"
+        - cp index.html dist/
+        - cp style.css dist/
+        - cp script.js dist/
   artifacts:
-    baseDirectory: /
+    baseDirectory: dist
     files:
       - '**/*'
-  cache:
-    paths: []
   framework: html
 
 hosting:
   S3AndCloudFront:
-    indexDocument: nback.html
-    errorDocument: nback.html
+    indexDocument: index.html
+    errorDocument: index.html
