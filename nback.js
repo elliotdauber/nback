@@ -48,6 +48,15 @@ class NbackGame {
 
   endGame() {
     $("#game-display").hide();
+    stats.set_num_right(stats.num_right + this.correctAnswers);
+    stats.set_num_wrong(stats.num_wrong + (this.numItems - this.correctAnswers));
+    if (this.correctAnswers == this.numItems) {
+      stats.set_winning_streak(stats.winning_streak + 1);
+      stats.set_wins(stats.wins + 1);
+    } else {
+      stats.set_winning_streak(0);
+      stats.set_losses(stats.losses + 1);
+    }
     alert("Game over! You scored " + this.correctAnswers + " out of " + this.numItems);
   }
 }
@@ -70,10 +79,49 @@ class Settings {
   }
 }
 
-var settings = new Settings(2, 10); //should probably be a singleton
+class Stats {
+  constructor() {
+    this.set_wins(0);
+    this.set_losses(0);
+    this.set_winning_streak(0);
+    this.set_num_right(0);
+    this.set_num_wrong(0);
+  }
+
+  set_wins(wins) {
+    this.wins = wins;
+    $("#stats-wins").html(wins);
+  }
+
+  set_losses(losses) {
+    this.losses = losses;
+    $("#stats-losses").html(losses);
+  }
+
+  set_winning_streak(winning_streak) {
+    this.winning_streak = winning_streak;
+    $("#stats-winning-streak").html(winning_streak);
+  }
+
+  set_num_right(num_right) {
+    this.num_right = num_right;
+    $("#stats-num-right").html(num_right);
+  }
+
+  set_num_wrong(num_wrong) {
+    this.num_wrong = num_wrong;
+    $("#stats-num-wrong").html(num_wrong);
+  }
+}
+
+//should probably be singletons
+var stats = new Stats()
+var settings = new Settings(2, 10);
+
 var game = null;
 //create a new game and start it when the start-game button is clicked
 $("#start-game").click(function() {
+  $("#stats-display").hide();
   $("#settings-display").hide();
   game = new NbackGame(settings);
   game.startGame();
@@ -112,7 +160,14 @@ $("#no").click(() => {
 $("#goto-settings").click(() => {
   game = null;
   $("#game-display").hide();
+  $("#stats-display").hide();
   $("#settings-display").show();
+});
+
+$("#goto-stats").click(() => {
+  $("#game-display").hide();
+  $("#settings-display").hide();
+  $("#stats-display").show();
 });
 
 $("#save-settings").click(() => {

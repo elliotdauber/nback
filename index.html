@@ -25,9 +25,23 @@
           <br>
           <button id="save-settings">Save</button>
         </div>
+
+        <div id="stats-display">
+          <h2>Stats</h2>
+          <div class="stat">Perfect Scoring Games: <span id="stats-wins"></span></div>
+          <br>
+          <div class="stat">Imperfect Scoring Games: <span id="stats-losses"></span></div>
+          <br>
+          <div class="stat">Perfect Game Stream: <span id="stats-winning-streak"></span></div>
+          <br>
+          <div class="stat">Correct Guesses: <span id="stats-num-right"></span></div>
+          <br>
+          <div class="stat">Incorrect Guesses: <span id="stats-num-wrong"></span></div>
+        </div>
       </div>
       <button id="start-game">New Game</button>
       <button id="goto-settings">Settings</button>
+      <button id="goto-stats">Stats</button>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="nback.js"></script>

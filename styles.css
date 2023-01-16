@@ -19,7 +19,7 @@
   padding: 5px;
 }
 
-#game-display, #settings-display {
+#game-display, #settings-display, #stats-display {
   display: none;
 }
 
@@ -43,4 +43,10 @@ button {
 
 #title {
   font-size: 40px;
+}
+
+.stat {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  padding: 1px;
 }
