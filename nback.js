@@ -9,7 +9,7 @@ class NbackGame {
   }
 
   generateItem() {
-    if (this.sequence.length >= this.nback && Math.random() < 0.65) {
+    if (this.sequence.length >= this.nback && Math.random() < 0.45) {
       return this.sequence[this.sequence.length - this.nback];
     }
     var index = Math.floor(Math.random() * this.letters.length);
