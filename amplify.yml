@@ -4,9 +4,9 @@ frontend:
     build:
       commands:
         - echo "Building app"
-        - cp index.html dist/
-        - cp style.css dist/
-        - cp script.js dist/
+        - cp nback.html dist/
+        - cp styles.css dist/
+        - cp nback.js dist/
   artifacts:
     baseDirectory: dist
     files:
@@ -15,5 +15,5 @@ frontend:
 
 hosting:
   S3AndCloudFront:
-    indexDocument: index.html
-    errorDocument: index.html
+    indexDocument: nback.html
+    errorDocument: nback.html
