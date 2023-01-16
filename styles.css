@@ -1,14 +1,30 @@
 .center-box {
-    height: 500px;
-    width: 80%;
+    height: 80%;
+    width: 95%;
     max-width: 600px;
     margin: 0 auto;
     text-align: center;
     border: 5px solid black;
+    border-radius: 10px;
+}
+
+.main-container {
+  height: 600px;
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5px;
+}
+
+#game-display, #settings-display {
+  display: none;
 }
 
 #display {
-  font-size: 50px;
+  font-size: 100px;
   margin: 20px 0;
 }
 
@@ -16,8 +32,15 @@ button {
   padding: 10px 20px;
   font-size: 20px;
   margin: 10px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 5px;
 }
 
 #score-board {
   margin: 10px 0;
+}
+
+#title {
+  font-size: 40px;
 }
