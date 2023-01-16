@@ -4,6 +4,7 @@ frontend:
     build:
       commands:
         - echo "Building app"
+        - mkdir dist
         - cp nback.html dist/
         - cp styles.css dist/
         - cp nback.js dist/
