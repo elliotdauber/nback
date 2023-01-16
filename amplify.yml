@@ -9,3 +9,9 @@ frontend:
       - '**/*'
   cache:
     paths: []
+  framework: html
+
+hosting:
+  S3AndCloudFront:
+    indexDocument: nback.html
+    errorDocument: nback.html
