@@ -53,6 +53,22 @@ class NbackGame {
       $("#no").show();
       $("#next").hide();
     }
+
+    if (!this.settings.selfPaced) {
+      const roundTimerSetIn = this.currentRound;
+      const game = this;
+      setTimeout(function() {
+        if (roundTimerSetIn == game.currentRound) {
+          game.updateScore(false);
+          if (game.currentRound == game.settings.numItems - 1) {
+            game.endGame();
+            game = null;
+          } else {
+            game.nextRound();
+          }
+        }
+      }, 5000);
+    }
   }
 
   updateScore(correct) {
@@ -60,11 +76,9 @@ class NbackGame {
     if (correct) {
       $("#correct").show();
       $("#incorrect").hide();
-      // $("#score-board").css("color", "#459735");
     } else {
       $("#incorrect").show();
       $("#correct").hide();
-      // $("#score-board").css("color", "#D15748");
     }
   }
 
@@ -88,11 +102,12 @@ class NbackGame {
 }
 
 class Settings {
-  constructor(nback, numItems) {
+  constructor(nback, numItems, selfPaced) {
     this.set_nback(nback);
     this.set_numItems(numItems);
     this.auditory = false;
     this.visual = true;
+    this.selfPaced = selfPaced;
     this.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   }
 
@@ -144,7 +159,7 @@ class Stats {
 
 //should probably be singletons
 var stats = new Stats()
-var settings = new Settings(2, 10);
+var settings = new Settings(2, 10, $("#self-paced").prop("checked"));
 
 var game = null;
 //create a new game and start it when the start-game button is clicked
@@ -221,5 +236,6 @@ $("#save-settings").click(() => {
   const sensoryMode = $('input[name=sensory-mode]:checked').val();
   settings.auditory = sensoryMode == 'auditory';
   settings.visual = sensoryMode == 'visual';
+  settings.selfPaced = $("#self-paced").prop("checked");
   alert("Settings saved!");
 });
