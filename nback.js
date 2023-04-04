@@ -1,28 +1,30 @@
 class NbackGame {
   constructor(settings) {
     this.sequence = [];
-    this.nback = settings.nback;
-    this.numItems = settings.numItems;
+    this.settings = settings;
     this.currentRound = -1;
     this.correctAnswers = 0;
-    this.letters = settings.letters;
   }
 
   generateItem() {
-    if (this.sequence.length >= this.nback && Math.random() < 0.45) {
-      return this.sequence[this.sequence.length - this.nback];
+    if (this.sequence.length >= this.settings.nback && Math.random() < 0.45) {
+      return this.sequence[this.sequence.length - this.settings.nback];
     }
-    var index = Math.floor(Math.random() * this.letters.length);
-    var item = this.letters[index];
+    var index = Math.floor(Math.random() * this.settings.letters.length);
+    var item = this.settings.letters[index];
     return item;
   }
 
   displayItem(item) {
-    var msg = new SpeechSynthesisUtterance();
-    msg.text = item.toLowerCase();
-    window.speechSynthesis.speak(msg);
-    $("#display").html("");
-    $("#display").html(item);
+    if (this.settings.auditory) {
+      var msg = new SpeechSynthesisUtterance();
+      msg.text = item.toLowerCase();
+      window.speechSynthesis.speak(msg);
+    }
+    if (this.settings.visual) {
+      $("#display").html("");
+      $("#display").html(item);
+    }
   }
 
   startGame() {
@@ -30,7 +32,12 @@ class NbackGame {
     $("#display").html("");
     $("#score").html(0);
     $("#score-board").css("color", "black");
-    for (var i = 0; i < this.numItems; i++) {
+    $("#yes").hide();
+    $("#no").hide();
+    $("#next").show();
+    $("#correct").hide();
+    $("#incorrect").hide();
+    for (var i = 0; i < this.settings.numItems; i++) {
       this.sequence.push(this.generateItem());
     }
     this.nextRound();
@@ -41,29 +48,42 @@ class NbackGame {
     this.currentRound++;
     this.currentItem = this.sequence[this.currentRound];
     this.displayItem(this.currentItem);
+    if (this.currentRound == this.settings.nback) {
+      $("#yes").show();
+      $("#no").show();
+      $("#next").hide();
+    }
   }
 
   updateScore(correct) {
     $("#score").html(this.correctAnswers);
     if (correct) {
-      $("#score-board").css("color", "#459735");
+      $("#correct").show();
+      $("#incorrect").hide();
+      // $("#score-board").css("color", "#459735");
     } else {
-      $("#score-board").css("color", "#D15748");
+      $("#incorrect").show();
+      $("#correct").hide();
+      // $("#score-board").css("color", "#D15748");
     }
   }
 
   endGame() {
     $("#game-display").hide();
     stats.set_num_right(stats.num_right + this.correctAnswers);
-    stats.set_num_wrong(stats.num_wrong + (this.numItems - this.correctAnswers));
-    if (this.correctAnswers == this.numItems) {
+    stats.set_num_wrong(stats.num_wrong + (this.settings.numItems - this.correctAnswers));
+    if (this.correctAnswers == this.settings.numItems) {
       stats.set_winning_streak(stats.winning_streak + 1);
       stats.set_wins(stats.wins + 1);
     } else {
       stats.set_winning_streak(0);
       stats.set_losses(stats.losses + 1);
     }
-    alert("Game over! You scored " + this.correctAnswers + " out of " + this.numItems);
+
+    alert("Game over! You scored " + this.correctAnswers + " out of " + this.settings.numItems);
+    if (stats.winning_streak >= 3) {
+      alert("You have completed 3 rounds at 100% accuracy! We suggest going to the next nback level. Go to the settings tab to do this. Great work!")
+    }
   }
 }
 
@@ -71,6 +91,8 @@ class Settings {
   constructor(nback, numItems) {
     this.set_nback(nback);
     this.set_numItems(numItems);
+    this.auditory = false;
+    this.visual = true;
     this.letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   }
 
@@ -135,14 +157,14 @@ $("#start-game").click(function() {
 
 $("#yes").click(() => {
   if (!game) return;
-  var previousItemIndex = game.currentRound - game.nback;
+  var previousItemIndex = game.currentRound - game.settings.nback;
   var correct = false;
-  if (previousItemIndex >= 0 && game.currentItem == game.sequence[game.currentRound - game.nback]) {
+  if (previousItemIndex >= 0 && game.currentItem == game.sequence[game.currentRound - game.settings.nback]) {
     game.correctAnswers++;
     correct = true;
   }
   game.updateScore(correct);
-  if (game.currentRound == game.numItems - 1) {
+  if (game.currentRound == game.settings.numItems - 1) {
     game.endGame();
     game = null;
   } else {
@@ -152,14 +174,26 @@ $("#yes").click(() => {
 
 $("#no").click(() => {
   if (!game) return;
-  var previousItemIndex = game.currentRound - game.nback;
+  var previousItemIndex = game.currentRound - game.settings.nback;
   var correct = false;
-  if (previousItemIndex < 0 || game.currentItem != game.sequence[game.currentRound - game.nback]) {
+  if (previousItemIndex < 0 || game.currentItem != game.sequence[game.currentRound - game.settings.nback]) {
     game.correctAnswers++;
     correct = true;
   }
   game.updateScore(correct);
-  if (game.currentRound == game.numItems - 1) {
+  if (game.currentRound == game.settings.numItems - 1) {
+    game.endGame();
+    game = null;
+  } else {
+    game.nextRound();
+  }
+});
+
+$("#next").click(() => {
+  if (!game) return;
+  game.correctAnswers++;
+  game.updateScore(true);
+  if (game.currentRound == game.settings.numItems - 1) {
     game.endGame();
     game = null;
   } else {
@@ -184,5 +218,8 @@ $("#save-settings").click(() => {
   //TODO: check if numeric
   settings.nback = $("#num-back").val();
   settings.numItems = $("#num-items").val();
+  const sensoryMode = $('input[name=sensory-mode]:checked').val();
+  settings.auditory = sensoryMode == 'auditory';
+  settings.visual = sensoryMode == 'visual';
   alert("Settings saved!");
 });
