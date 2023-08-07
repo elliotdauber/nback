@@ -23,9 +23,52 @@
   display: none;
 }
 
+#stats-display {
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  height: 100%;
+}
+
 #display {
   font-size: 100px;
   margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.display-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.display-box {
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  width: 100px;
+  border: 2px solid black;
+}
+
+.display-box.right {
+  border-right: 4px solid black;
+}
+
+.display-box.left {
+  border-left: 4px solid black;
+}
+
+.display-box.top {
+  border-top: 4px solid black;
+}
+
+.display-box.bottom {
+  border-bottom: 4px solid black;
+}
+
+.display-box.active {
+  background-color: lightblue;
 }
 
 button {
@@ -62,4 +105,37 @@ button {
 
 #correctness {
   padding: 5px;
+}
+
+
+#pergame-stats-container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+#pergame-stats-table {
+  width: 500px;
+  border-collapse: collapse;
+}
+
+#pergame-stats-table th, #pergame-stats-table td {
+  padding: 6px;
+  border: 1px solid #dddddd;
+  text-align: center;
+}
+
+#pergame-stats-table tr.flawless {
+  background-color: lightgreen;
+}
+
+#pergame-stats-table thead {
+  background-color: #dddddd;
+}
+
+
+#print-stats {
+  position: relative;
+  top: 10px;
+  left: 46%;
 }
